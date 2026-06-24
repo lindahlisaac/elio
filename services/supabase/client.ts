@@ -14,7 +14,14 @@ const ExpoSecureStoreAdapter = {
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
 const supabasePublishableKey = process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? '';
 
-export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
+export const isSupabaseConfigured =
+  Boolean(supabaseUrl) && Boolean(supabasePublishableKey);
+
+// Placeholders let the app boot before .env is filled in; auth calls no-op until configured.
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabasePublishableKey || 'placeholder',
+  {
   auth: {
     storage: Platform.OS === 'web' ? AsyncStorage : ExpoSecureStoreAdapter,
     autoRefreshToken: true,
@@ -22,6 +29,3 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
     detectSessionInUrl: false,
   },
 });
-
-export const isSupabaseConfigured =
-  Boolean(supabaseUrl) && Boolean(supabasePublishableKey);

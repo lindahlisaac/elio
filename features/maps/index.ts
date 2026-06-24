@@ -1,1 +1,1 @@
-// Map view, trail layers, and coverage overlays.
+export { MapFrame } from './MapFrame';
